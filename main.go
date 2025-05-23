@@ -3,6 +3,5 @@ package main
 
 
 func main() {
-	startRepl()
-	
+	StartRepl()
 }

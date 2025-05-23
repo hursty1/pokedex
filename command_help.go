@@ -13,12 +13,12 @@ import (
 // 	return errors.New("")
 // }
 
-func commandHelp() error {
+func CommandHelp(config *Config) error {
 	fmt.Println()
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()
-	for _, commands := range getCommands() {
+	for _, commands := range GetCommands() {
 		fmt.Printf("%s : %s \n", commands.name, commands.descirption)
 	}
 	fmt.Println()
