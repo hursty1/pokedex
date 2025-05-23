@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"pokedex/internal/pokeapi"
 	"strings"
 )
 
@@ -14,12 +15,13 @@ type cliCommands struct {
 }
 
 type Config struct {
-	Next string
-	Previous string
+	pokeapiClient pokeapi.Client
+	Next *string
+	Previous *string
 }
-func StartRepl() {
+func StartRepl(config *Config) {
 	scanner := bufio.NewScanner(os.Stdin)
-	config := &Config{}
+	// config := &Config{}
 	for {
 
 		fmt.Print("Pokedex >")
