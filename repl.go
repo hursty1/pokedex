@@ -20,6 +20,9 @@ func StartRepl(config *Config) {
 			
 			command, ok := GetCommands()[input[0]]
 			if ok {
+				if len(input) > 1 {
+					config.Args = &input[1]
+				}
 				err := command.callback(config)
 				if err != nil {
 					fmt.Println(err)
@@ -56,6 +59,26 @@ func GetCommands() map[string]cliCommands {
 		name: "map back",
 		descirption: "Displays the last 20 locations in the pokemon world",
 		callback: CommandMapB,
+	},
+	"explore": {
+		name: "explore",
+		descirption: "Given a location or location id, it will list the pokemon avilable.",
+		callback: CommandExplore,
+	},
+	"catch": {
+		name: "catch",
+		descirption: "Attempt to catch a pokemon.",
+		callback: CommandCatch,
+	},
+	"pokedex": {
+		name: "pokedex",
+		descirption: "List caught Pokemon.",
+		callback: CommandList,
+	},
+	"inspect": {
+		name: "inspect",
+		descirption: "Inspect a caught pokemons pokedex entry.",
+		callback: commandInspect,
 	},
 	}
 }

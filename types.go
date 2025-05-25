@@ -13,5 +13,7 @@ type Config struct {
 	pokeapiClient pokeapi.Client
 	Next *string
 	Previous *string
+	Args *string
+	Pokedex map[string]pokeapi.PokemonResponse
 	// Cache *pokecache.Cache
 }

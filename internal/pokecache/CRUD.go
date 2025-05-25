@@ -18,7 +18,7 @@ func (c *Cache) Add(key string, val []byte) {
 func (c *Cache) Get(key string) ([]byte, bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	fmt.Printf("Cache key: %s has been accessed though cache\n", key)
 	value, found := c.item[key]
+	fmt.Printf("Cache key: %s has been accessed though cache. Found: %t\n", key, found)
 	return value.val,found
 }
