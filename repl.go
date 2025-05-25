@@ -14,36 +14,43 @@ func StartRepl(config *Config) {
 		fmt.Println(err)
 		return
 	}
-	// defer term.Restore(int(os.Stdin.Fd()), cli.OldState)
 	defer cli.CleanUp()
-	// fmt.Printf("CLI Started %d\n", cli.HistoryIndex)
 	// config := &Config{}
 	for {
 		// b, _ := cli.Reader.ReadByte()
 		// fmt.Println(b)
-		cli.Input()
+		raw_input, err := cli.Input()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		input := cleanInput(raw_input)
 		// fmt.Print("Pokedex >")
 		// scanner.Scan()
 		// input := cleanInput(scanner.Text())
-		// if len(input) > 0 {
+		if len(input) > 0 {
 			
-		// 	command, ok := GetCommands()[input[0]]
-		// 	if ok {
-		// 		if len(input) > 1 {
-		// 			config.Args = &input[1]
-		// 		}
-		// 		err := command.callback(config)
-		// 		if err != nil {
-		// 			fmt.Println(err)
-		// 		}
-		// 		continue
-		// 	} else {
-		// 		fmt.Println("Unknown command")
-		// 		continue
-		// 	}
+			command, ok := GetCommands()[input[0]]
+			if ok {
+				if len(input) > 1 {
+					config.Args = &input[1]
+				}
+				err := command.callback(config)
+				if err != nil {
+					fmt.Println(err)
+				}
+				cli.TextInput = ""
+				cli.ResetInput()
+				continue
+			} else {
+				fmt.Println("\rUnknown command\r")
+				cli.TextInput = ""
+				cli.ResetInput()
+				continue
+			}
 			
 			
-		// }
+		}
 	}
 }
 
@@ -94,7 +101,10 @@ func GetCommands() map[string]cliCommands {
 
 
 func cleanInput(text string) []string {
+
 	output := strings.ToLower(text)
 	words := strings.Fields(output)
+	// fmt.Printf("Cleaning %s, to:", output)
+	// fmt.Println(words)
 	return words
 }

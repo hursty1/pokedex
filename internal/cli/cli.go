@@ -13,7 +13,7 @@ type CLI struct {
 	Reader *bufio.Reader
 	HistoryIndex int
 	History []string
-	input string
+	TextInput string
 	OldState *term.State
 	exitChan chan struct{}
 
@@ -47,7 +47,7 @@ func Setup() (CLI, error) {
 		Reader: reader,
 		History: history,
 		HistoryIndex: -1,
-		input: "",
+		TextInput: "",
 		OldState: oldState,
 		exitChan: exitChan,
 	}
@@ -55,8 +55,12 @@ func Setup() (CLI, error) {
 	return cli, nil
 }
 
-func (c *CLI) Input() error {
+func (c *CLI) Input() (string, error) {
 	// var input string
+	// c.input = ""
+	// fmt.Print("\r\033[K") // reset the line of text
+	// fmt.Print("Pokedex > ")
+
 	b, _ := c.Reader.ReadByte()
 	switch b {
 	case 3: 
@@ -67,22 +71,34 @@ func (c *CLI) Input() error {
 		fmt.Println()
 		fmt.Print("\r\033[K") 
 		// fmt.Println("You typed:", c.input)
-		c.History = append(c.History, c.input)
+		c.History = append(c.History, c.TextInput)
 		c.HistoryIndex = len(c.History)
-		c.input = ""
-		fmt.Print("\r\033[K") // reset the line of text
-		fmt.Print("Pokedex > ")
+		// fmt.Println("RETURNING", c.TextInput)
+		return c.TextInput, nil
+		// c.input = ""
+		// fmt.Print("\r\033[K") // reset the line of text
+		// fmt.Print("Pokedex > ")
 	case 9: //tab
 		fmt.Println("Tab")
 	case 27:
 		fmt.Println("ArrowKey")
-		return nil
+		return "",nil
+	case 127:
+		if len(c.TextInput) > 0 {
+			c.TextInput = c.TextInput[:len(c.TextInput)-1]
+			fmt.Print("\rPokedex > " + c.TextInput + " \b")
+		}
 	default:
-		c.input += string(b)
+		c.TextInput += string(b)
 		fmt.Print(string(b))
 	}
 
-	return nil
+	return "",nil
+}
+
+func (c *CLI) ResetInput() {
+	fmt.Print("\r\033[K") // reset the line of text
+	fmt.Print("Pokedex > ")
 }
 
 func (c *CLI) CleanUp() {

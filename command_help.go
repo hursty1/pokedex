@@ -14,13 +14,14 @@ import (
 // }
 
 func CommandHelp(config *Config) error {
-	fmt.Println()
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Println("Usage:")
-	fmt.Println()
+	fmt.Print("\r\n") // reset and newline
+	fmt.Print("\rWelcome to the Pokedex!\r\n")
+	fmt.Print("\rUsage:\r\n\r\n")
+
 	for _, commands := range GetCommands() {
-		fmt.Printf("%s : %s \n", commands.name, commands.descirption)
+		fmt.Printf("\r%-10s : %s\r\n", commands.name, commands.descirption)
 	}
-	fmt.Println()
+
+	fmt.Print("\r\n")
 	return nil
 }
