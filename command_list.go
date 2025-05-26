@@ -4,9 +4,9 @@ import "fmt"
 
 
 func CommandList(config *Config) error {
-	fmt.Println("Your Pokedex:")
+	fmt.Print("Your Pokedex:\n\r")
 	for _, v := range config.Pokedex {
-		fmt.Printf(" - %s\n", v.Name)
+		fmt.Printf(" - %s\n\r", v.Name)
 	}
 
 	return nil

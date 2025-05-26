@@ -23,7 +23,7 @@ func CommandMap(config *Config) error {
 
 func CommandMapB(config *Config) error {
 	if config.Previous == nil {
-		return errors.New("you're on the first page")
+		return errors.New("\ryou're on the first page\r")
 	}
 	var (
 		locationResponse pokeapi.LocationAreaResponse
@@ -44,6 +44,6 @@ func CommandMapB(config *Config) error {
 
 func PrintNames(locationAreas []pokeapi.LocationArea) {
 	for _, location := range locationAreas {
-		fmt.Println(location.Name)
+		fmt.Print(location.Name + "\r\n")
 	}
 }

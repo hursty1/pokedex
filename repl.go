@@ -34,7 +34,11 @@ func StartRepl(config *Config) {
 			if ok {
 				if len(input) > 1 {
 					config.Args = &input[1]
+					if *config.Args == "exit" {
+						cli.CleanUp()
 				}
+				}
+				
 				err := command.callback(config)
 				if err != nil {
 					fmt.Println(err)

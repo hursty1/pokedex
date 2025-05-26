@@ -56,11 +56,6 @@ func Setup() (CLI, error) {
 }
 
 func (c *CLI) Input() (string, error) {
-	// var input string
-	// c.input = ""
-	// fmt.Print("\r\033[K") // reset the line of text
-	// fmt.Print("Pokedex > ")
-
 	b, _ := c.Reader.ReadByte()
 	switch b {
 	case 3: 
@@ -70,18 +65,35 @@ func (c *CLI) Input() (string, error) {
 	case 13: //enter
 		fmt.Println()
 		fmt.Print("\r\033[K") 
-		// fmt.Println("You typed:", c.input)
 		c.History = append(c.History, c.TextInput)
 		c.HistoryIndex = len(c.History)
-		// fmt.Println("RETURNING", c.TextInput)
 		return c.TextInput, nil
-		// c.input = ""
-		// fmt.Print("\r\033[K") // reset the line of text
-		// fmt.Print("Pokedex > ")
 	case 9: //tab
 		fmt.Println("Tab")
 	case 27:
-		fmt.Println("ArrowKey")
+		b1, _ := c.Reader.ReadByte()
+		b2, _ := c.Reader.ReadByte()
+		if b1 == 91 {
+			switch b2 {
+			case 65:
+				if c.HistoryIndex > 0 {
+					c.HistoryIndex --
+					c.TextInput = c.History[c.HistoryIndex]
+					fmt.Print("\r\033[K") // clear line
+					fmt.Print("Pokedex > " + c.TextInput)
+				}
+			case 66: // Down
+            if c.HistoryIndex < len(c.History)-1 {
+                c.HistoryIndex++
+                c.TextInput = c.History[c.HistoryIndex]
+            } else {
+                c.HistoryIndex = len(c.History)
+                c.TextInput = ""
+            }
+            fmt.Print("\r\033[K")
+            fmt.Print("Pokedex > " + c.TextInput)
+			}
+		}		
 		return "",nil
 	case 127:
 		if len(c.TextInput) > 0 {
